@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain, WebFrameMain } from "electron";
-import { fileURLToPath, pathToFileURL } from "url";
-import { getUIPath } from "./path-resolver.js";
 import path from "path";
+import { fileURLToPath } from "url";
+import { getUIPath } from "./path-resolver.js";
 
 export function isDev(): Boolean {
    return process.env.NODE_ENV === "development";
@@ -10,10 +10,10 @@ export function isDev(): Boolean {
 /**
  * Đăng ký lắng nghe có trả dữ liệu (promise)
  */
-export function ipcOnRequest<Key extends keyof IpcEventMap>(key: Key, handler: () => IpcEventMap[Key]) {
-   ipcMain.handle(key, (event) => {
+export function ipcOnRequest<Key extends keyof IpcEventMap>(key: Key, handler: (payload: IpcEventMap[Key]) => Promise<any>) {
+   ipcMain.handle(key, (event, payload) => {
       validateEventFrame(event.senderFrame);
-      return handler();
+      return handler(payload);
    });
 }
 

@@ -1,5 +1,5 @@
 const demoService = {
-   getConfig: () => {
+   async getConfig () {
       return { cpu: 0.8 };
    },
    logMessage: (msg: string) => {
